@@ -67,12 +67,9 @@ class WeatherService {
 
   /**
    * Transform OpenWeatherMap API response to our schema format
-   * API returns temperature in Kelvin, we convert to Celsius
+   * Note: API is called with units=metric, so temperatures are already in Celsius
    */
   transformApiResponse(apiData: any) {
-    // Helper function to convert Kelvin to Celsius
-    const kelvinToCelsius = (kelvin: number) => Math.round((kelvin - 273.15) * 10) / 10;
-    
     return {
       city: this.city,
       timestamp: new Date(apiData.dt * 1000), // Convert Unix timestamp to Date
@@ -89,24 +86,24 @@ class WeatherService {
       weatherDescription: apiData.weather[0].description,
       weatherIcon: apiData.weather[0].icon,
       
-      // Main data - Convert from Kelvin to Celsius
-      temperature: kelvinToCelsius(apiData.main.temp),
-      feelsLike: kelvinToCelsius(apiData.main.feels_like),
-      tempMin: kelvinToCelsius(apiData.main.temp_min),
-      tempMax: kelvinToCelsius(apiData.main.temp_max),
-      pressure: apiData.main.pressure,
-      humidity: apiData.main.humidity,
+      // Main data - Already in Celsius from API (units=metric)
+      temperature: Math.round(apiData.main.temp * 10) / 10,
+      feelsLike: Math.round(apiData.main.feels_like * 10) / 10,
+      tempMin: Math.round(apiData.main.temp_min * 10) / 10,
+      tempMax: Math.round(apiData.main.temp_max * 10) / 10,
+      pressure: apiData.main.pressure, // hPa (hectopascals)
+      humidity: apiData.main.humidity, // percentage
       seaLevel: apiData.main.sea_level,
       groundLevel: apiData.main.grnd_level,
       
-      // Wind data
-      windSpeed: apiData.wind.speed,
+      // Wind data - m/s from API, convert to km/h for display
+      windSpeed: Math.round(apiData.wind.speed * 3.6 * 10) / 10, // m/s to km/h
       windDirection: apiData.wind.deg,
-      windGust: apiData.wind.gust,
+      windGust: apiData.wind.gust ? Math.round(apiData.wind.gust * 3.6 * 10) / 10 : undefined,
       
       // Additional data
-      cloudiness: apiData.clouds.all,
-      visibility: apiData.visibility,
+      cloudiness: apiData.clouds.all, // percentage
+      visibility: apiData.visibility, // meters
       
       // System data
       country: apiData.sys.country,

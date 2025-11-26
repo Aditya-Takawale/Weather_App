@@ -1,6 +1,5 @@
 # Dependencies
 node_modules/
-package-lock.json
 
 # Environment variables
 .env
@@ -54,6 +53,7 @@ coverage/
 tmp/
 temp/
 *.tmp
+*.bak
 
 # MongoDB
 data/
@@ -63,3 +63,7 @@ data/
 
 # Angular
 .angular/
+.angular/cache/
+
+# Package lock files (keep package.json only)
+package-lock.json

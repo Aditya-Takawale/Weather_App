@@ -1,4 +1,35 @@
 {
+  "name": "weather-dashboard",
+  "version": "1.0.0",
+  "description": "Full-stack Weather Monitoring System with Real-time Dashboard and Alert System",
+  "main": "index.js",
+  "scripts": {
+    "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
+    "dev:backend": "cd backend && npm run build && npm start",
+    "dev:frontend": "cd frontend && npm start",
+    "build": "npm run build:backend && npm run build:frontend",
+    "build:backend": "cd backend && npm run build",
+    "build:frontend": "cd frontend && npm run build",
+    "start": "concurrently \"npm run start:backend\" \"npm run start:frontend\"",
+    "start:backend": "cd backend && npm start",
+    "start:frontend": "cd frontend && npm run serve:ssr:frontend"
+  },
+  "keywords": [
+    "weather",
+    "dashboard",
+    "monitoring",
+    "cron",
+    "express",
+    "angular",
+    "mongodb",
+    "fullstack"
+  ],
+  "author": "Aditya-Takawale",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Aditya-Takawale/Weather_App.git"
+  },
   "devDependencies": {
     "@types/compression": "^1.8.1",
     "@types/cors": "^2.8.19",
@@ -7,6 +38,7 @@
     "@types/node": "^24.10.1",
     "@typescript-eslint/eslint-plugin": "^8.48.0",
     "@typescript-eslint/parser": "^8.48.0",
+    "concurrently": "^9.2.1",
     "ts-node": "^10.9.2",
     "typescript": "^5.9.3"
   }

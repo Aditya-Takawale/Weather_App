@@ -34,19 +34,19 @@ export interface IRawWeatherData extends Document {
   weatherIcon: string;
   
   // Main temperature and pressure data
-  temperature: number;          // in Celsius (API returns Kelvin, we'll convert)
+  temperature: number;          // in Celsius (API called with units=metric)
   feelsLike: number;            // in Celsius
   tempMin: number;              // in Celsius
   tempMax: number;              // in Celsius
-  pressure: number;             // hPa
+  pressure: number;             // hPa (hectopascals)
   humidity: number;             // percentage
   seaLevel?: number;            // hPa
   groundLevel?: number;         // hPa
   
   // Wind data
-  windSpeed: number;            // m/s
-  windDirection: number;        // degrees
-  windGust?: number;            // m/s
+  windSpeed: number;            // km/h (converted from m/s)
+  windDirection: number;        // degrees (0-360)
+  windGust?: number;            // km/h (converted from m/s)
   
   // Additional data
   cloudiness: number;           // percentage
