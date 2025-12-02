@@ -6,9 +6,6 @@
 // custom components at https://material.angular.dev/guide/theming
 @use '@angular/material' as mat;
 
-// Import ngx-ui-loader styles
-@import 'ngx-ui-loader/ngx-ui-loader.css';
-
 html {
   @include mat.theme((
     color: (

@@ -8,7 +8,6 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatGridListModule } from '@angular/material/grid-list';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { NgxUiLoaderService, NgxUiLoaderModule } from 'ngx-ui-loader';
 import { interval, Subscription } from 'rxjs';
 import { switchMap, startWith } from 'rxjs/operators';
@@ -71,7 +70,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
   });
 
   constructor(
-    private modalService: NgbModal,
     private changeDetection: ChangeDetectorRef,
     private router: Router,
     private fb: FormBuilder,
