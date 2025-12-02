@@ -1,24 +1,28 @@
 <div class="dashboard-container">
-  @if (loading()) {
-    <div class="loading-container">
-      <mat-spinner></mat-spinner>
-      <p>Loading weather data...</p>
-    </div>
-  } @else if (error()) {
-    <div class="error-container">
-      <mat-icon color="warn">error</mat-icon>
-      <p>{{ error() }}</p>
-      <button mat-raised-button color="primary" (click)="refreshData()">Retry</button>
-    </div>
-  } @else if (currentWeather()) {
-    <!-- Main Dashboard Grid -->
-    <div class="weather-dashboard">
+  <!-- NGX UI Loader -->
+  <ngx-ui-loader></ngx-ui-loader>
+  
+  <!-- Loading State -->
+  <div class="loading-container" *ngIf="loading()">
+    <mat-spinner></mat-spinner>
+    <p>Loading weather data...</p>
+  </div>
+
+  <!-- Error State -->
+  <div class="error-container" *ngIf="error() && !loading()">
+    <mat-icon color="warn">error</mat-icon>
+    <p>{{ error() }}</p>
+    <button mat-raised-button color="primary" (click)="refreshData()">Retry</button>
+  </div>
+
+  <!-- Main Dashboard Grid -->
+  <div class="weather-dashboard" *ngIf="currentWeather() && !loading() && !error()">
       
       <!-- Left Column -->
       <div class="left-column">
         
         <!-- Main Temperature Card -->
-        <div class="main-temp-card">
+        <div class="main-temp-card" *ngIf="currentWeather()">
           <div class="temp-icon">
             <mat-icon>wb_sunny</mat-icon>
           </div>
@@ -28,10 +32,13 @@
 
         <!-- 5-Day Forecast -->
         <div class="forecast-card">
-          <div class="forecast-day" *ngFor="let day of weekForecast">
+          <div class="forecast-day" *ngFor="let day of weekForecast()">
             <div class="day-name">{{ day.name }}</div>
-            <mat-icon>{{ day.icon }}</mat-icon>
+            <mat-icon *ngIf="day.icon">{{ day.icon }}</mat-icon>
             <div class="day-temp">{{ day.high }}°<br><span class="low-temp">{{ day.low }}°</span></div>
+          </div>
+          <div *ngIf="weekForecast().length === 0" class="no-forecast">
+            <p>No forecast data available</p>
           </div>
         </div>
 
@@ -44,11 +51,18 @@
               <span class="alert-value">{{ activeAlerts().length }}</span>
             </div>
           </div>
-          <div class="alert-item">
+          <div class="alert-item" *ngIf="activeAlerts().length > 0">
             <mat-icon>flash_on</mat-icon>
             <div class="alert-info">
+              <span class="alert-label">Active Alert</span>
+              <span class="alert-value">{{ activeAlerts()[0].severity }}</span>
+            </div>
+          </div>
+          <div class="alert-item" *ngIf="activeAlerts().length === 0">
+            <mat-icon>check_circle</mat-icon>
+            <div class="alert-info">
               <span class="alert-label">Lightning</span>
-              <span class="alert-value">{{ lightningStrikes }}</span>
+              <span class="alert-value">0</span>
             </div>
           </div>
         </div>
@@ -61,7 +75,7 @@
         <!-- Wind Information -->
         <div class="info-card">
           <div class="card-title">Wind</div>
-          <div class="wind-section">
+          <div class="wind-section" *ngIf="currentWeather()">
             <div class="wind-item">
               <span class="label">Speed</span>
               <span class="value">{{ currentWeather()!.windSpeed | number:'1.1-1' }} km/h</span>
@@ -86,7 +100,7 @@
         <!-- Humidity -->
         <div class="info-card">
           <div class="card-title">Humidity</div>
-          <div class="humidity-section">
+          <div class="humidity-section" *ngIf="currentWeather()">
             <div class="humidity-value">{{ currentWeather()!.humidity }}%</div>
             <div class="dew-point">The dew point is {{ calculateDewPoint(currentWeather()!.temperature, currentWeather()!.humidity) }}°C right now</div>
           </div>
@@ -95,7 +109,7 @@
         <!-- Rain Information -->
         <div class="info-card rain-card">
           <div class="card-title">Rain</div>
-          <div class="rain-section">
+          <div class="rain-section" *ngIf="currentWeather()">
             <div class="rain-item">
               <mat-icon>water_drop</mat-icon>
               <div>
@@ -111,15 +125,21 @@
               </div>
             </div>
           </div>
+          <div *ngIf="!currentWeather()" class="rain-section">
+            <p>No rain data available</p>
+          </div>
         </div>
 
         <!-- Pressure -->
         <div class="info-card">
           <div class="card-title">Atmospheric Pressure</div>
-          <div class="pressure-section">
+          <div class="pressure-section" *ngIf="currentWeather()">
             <div class="pressure-gauge">
               <div class="gauge-value">{{ currentWeather()!.pressure }} hPa</div>
             </div>
+          </div>
+          <div *ngIf="!currentWeather()" class="pressure-section">
+            <p>No pressure data available</p>
           </div>
         </div>
 
@@ -129,10 +149,15 @@
             <mat-icon>wb_sunny</mat-icon>
             <span>UV Index</span>
           </div>
-          <div class="quality-value">{{ uvIndex }}</div>
-          <div class="quality-label">{{ uvLabel }}</div>
-          <div class="quality-bar">
-            <div class="bar-fill" [style.width.%]="uvIndex * 10"></div>
+          <div *ngIf="uvData()">
+            <div class="quality-value">{{ uvData()?.uvIndex || 0 }}</div>
+            <div class="quality-label">{{ uvData()?.label || 'N/A' }}</div>
+            <div class="quality-bar">
+              <div class="bar-fill" [style.width.%]="(uvData()?.uvIndex || 0) * 10"></div>
+            </div>
+          </div>
+          <div *ngIf="!uvData()" class="no-data">
+            <p>No UV data available</p>
           </div>
         </div>
 
@@ -142,10 +167,15 @@
             <mat-icon>air</mat-icon>
             <span>Air Quality</span>
           </div>
-          <div class="quality-value">{{ airQuality }}</div>
-          <div class="quality-label">{{ airQualityLabel }}</div>
-          <div class="quality-bar">
-            <div class="bar-fill aqi" [style.width.%]="airQuality"></div>
+          <div *ngIf="airQualityData()">
+            <div class="quality-value">{{ airQualityData()?.aqi || 0 }}</div>
+            <div class="quality-label">{{ airQualityData()?.label || 'N/A' }}</div>
+            <div class="quality-bar">
+              <div class="bar-fill aqi" [style.width.%]="airQualityData()?.aqi || 0"></div>
+            </div>
+          </div>
+          <div *ngIf="!airQualityData()" class="no-data">
+            <p>No air quality data available</p>
           </div>
         </div>
 
@@ -156,23 +186,26 @@
         
         <!-- Moon Phase Card -->
         <div class="moon-card">
-          <div class="moon-title">Waxing Gibbous</div>
-          <div class="moon-info">
+          <div class="moon-title">Moon Phase</div>
+          <div class="moon-info" *ngIf="moonData()">
             <div class="moon-item">
               <span class="label">Illumination</span>
-              <span class="value">{{ moonIllumination }}%</span>
+              <span class="value">{{ moonData()?.illumination || 0 }}%</span>
             </div>
             <div class="moon-icon">
               <mat-icon>brightness_3</mat-icon>
             </div>
             <div class="moon-item">
               <span class="label">Moonrise</span>
-              <span class="value">in {{ moonriseIn }}</span>
+              <span class="value">in {{ moonData()?.moonriseIn || 'N/A' }}</span>
             </div>
           </div>
-          <div class="moon-phase">
+          <div class="moon-phase" *ngIf="moonData()">
             <span class="label">Next Full Moon</span>
-            <span class="value">{{ nextFullMoon }}</span>
+            <span class="value">{{ moonData()?.nextFullMoon || 'N/A' }}</span>
+          </div>
+          <div *ngIf="!moonData()" class="no-data">
+            <p>No moon data available</p>
           </div>
         </div>
 
@@ -196,5 +229,5 @@
       </div>
 
     </div>
-  }
+  
 </div>

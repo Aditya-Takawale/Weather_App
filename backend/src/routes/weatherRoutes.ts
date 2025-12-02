@@ -1,5 +1,6 @@
 import express, { Request, Response, NextFunction } from 'express';
 import RawWeatherData from '../models/RawWeatherData';
+import weatherService from '../services/weatherService';
 import logger from '../config/logger';
 const router = express.Router();
 
@@ -86,6 +87,78 @@ router.get('/history', async (req: Request, res: Response, next: NextFunction) =
     });
   } catch (error) {
     logger.error(`Error fetching weather history: ${(error as Error).message}`);
+    next(error);
+  }
+});
+
+// GET /api/weather/forecast - Get 5-day weather forecast
+router.get('/forecast', async (_req: Request, res: Response, next: NextFunction) => {
+  try {
+    const forecast = await weatherService.fetchForecast();
+    
+    logger.info(`Fetched 5-day forecast`);
+    
+    res.json({
+      success: true,
+      data: forecast,
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    logger.error(`Error fetching forecast: ${(error as Error).message}`);
+    next(error);
+  }
+});
+
+// GET /api/weather/air-quality - Get air quality data
+router.get('/air-quality', async (_req: Request, res: Response, next: NextFunction) => {
+  try {
+    const airQuality = await weatherService.fetchAirQuality();
+    
+    logger.info(`Fetched air quality data`);
+    
+    res.json({
+      success: true,
+      data: airQuality,
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    logger.error(`Error fetching air quality: ${(error as Error).message}`);
+    next(error);
+  }
+});
+
+// GET /api/weather/uv-index - Get UV index
+router.get('/uv-index', async (_req: Request, res: Response, next: NextFunction) => {
+  try {
+    const uvData = await weatherService.fetchUVIndex();
+    
+    logger.info(`Fetched UV index`);
+    
+    res.json({
+      success: true,
+      data: uvData,
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    logger.error(`Error fetching UV index: ${(error as Error).message}`);
+    next(error);
+  }
+});
+
+// GET /api/weather/moon - Get moon phase data
+router.get('/moon', async (_req: Request, res: Response, next: NextFunction) => {
+  try {
+    const moonData = await weatherService.fetchMoonData();
+    
+    logger.info(`Fetched moon data`);
+    
+    res.json({
+      success: true,
+      data: moonData,
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    logger.error(`Error fetching moon data: ${(error as Error).message}`);
     next(error);
   }
 });

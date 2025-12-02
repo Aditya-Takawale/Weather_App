@@ -1,4 +1,4 @@
-import { Injectable, inject } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
@@ -8,13 +8,15 @@ import { WeatherData, ApiResponse, PaginatedResponse } from '../models/weather.m
   providedIn: 'root'
 })
 export class WeatherService {
-  private http = inject(HttpClient);
-  private apiUrl = environment.apiUrl;
+  private baseUrl = environment.apiUrl;
+  private apiEndpoints = environment.apiEndpoints;
+
+  constructor(private http: HttpClient) {}
 
   getCurrentWeather(city: string = 'Pune'): Observable<ApiResponse<WeatherData>> {
     const params = new HttpParams().set('city', city);
     return this.http.get<ApiResponse<WeatherData>>(
-      `${this.apiUrl}${environment.apiEndpoints.weather.current}`,
+      `${this.baseUrl}${this.apiEndpoints.weather.current}`,
       { params }
     );
   }
@@ -39,8 +41,32 @@ export class WeatherService {
     }
 
     return this.http.get<PaginatedResponse<WeatherData>>(
-      `${this.apiUrl}${environment.apiEndpoints.weather.history}`,
+      `${this.baseUrl}${this.apiEndpoints.weather.history}`,
       { params }
+    );
+  }
+
+  getForecast(): Observable<ApiResponse<any>> {
+    return this.http.get<ApiResponse<any>>(
+      `${this.baseUrl}${this.apiEndpoints.weather.forecast}`
+    );
+  }
+
+  getAirQuality(): Observable<ApiResponse<any>> {
+    return this.http.get<ApiResponse<any>>(
+      `${this.baseUrl}${this.apiEndpoints.weather.airQuality}`
+    );
+  }
+
+  getUVIndex(): Observable<ApiResponse<any>> {
+    return this.http.get<ApiResponse<any>>(
+      `${this.baseUrl}${this.apiEndpoints.weather.uvIndex}`
+    );
+  }
+
+  getMoonData(): Observable<ApiResponse<any>> {
+    return this.http.get<ApiResponse<any>>(
+      `${this.baseUrl}${this.apiEndpoints.weather.moon}`
     );
   }
 }

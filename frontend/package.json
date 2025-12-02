@@ -34,10 +34,12 @@
     "@angular/platform-server": "^20.3.0",
     "@angular/router": "^20.3.0",
     "@angular/ssr": "^20.3.6",
+    "@ng-bootstrap/ng-bootstrap": "^19.0.1",
     "chart.js": "^4.5.1",
     "date-fns": "^4.1.0",
     "express": "^5.1.0",
     "ng2-charts": "^8.0.0",
+    "ngx-ui-loader": "^19.0.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0"
   },

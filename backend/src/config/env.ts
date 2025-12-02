@@ -50,7 +50,7 @@ const config: Config = {
   
   // Cron Schedules
   cronSchedules: {
-    dataFetch: process.env.CRON_DATA_FETCH || '*/30 * * * *',      // Every 30 minutes
+    dataFetch: process.env.CRON_DATA_FETCH || '*/10 * * * *',      // Every 10 minutes
     dashboardUpdate: process.env.CRON_DASHBOARD_UPDATE || '0 * * * *', // Every hour
     dataCleanup: process.env.CRON_DATA_CLEANUP || '0 0 * * *',     // Daily at midnight
     alertCheck: process.env.CRON_ALERT_CHECK || '*/15 * * * *'     // Every 15 minutes

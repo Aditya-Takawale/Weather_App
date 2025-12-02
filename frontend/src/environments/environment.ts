@@ -4,16 +4,27 @@ export const environment = {
   apiEndpoints: {
     weather: {
       current: '/weather/current',
-      history: '/weather/history'
+      history: '/weather/history',
+      forecast: '/weather/forecast',
+      airQuality: '/weather/air-quality',
+      uvIndex: '/weather/uv-index',
+      moon: '/weather/moon'
     },
     dashboard: {
       summary: '/dashboard/summary',
-      trends: '/dashboard/trends'
+      trends: '/dashboard/trends',
+      reports: '/dashboard/reports',
+      export: '/dashboard/export'
     },
     alerts: {
       active: '/alerts/active',
       history: '/alerts/history',
-      config: '/alerts/config'
+      config: '/alerts/config',
+      update: '/alerts/config',
+      delete: '/alerts/config'
+    },
+    admin: {
+      panChangeRequests: '/adminApi/getUserPanChangeRequests'
     }
   },
   refreshIntervals: {

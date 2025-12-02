@@ -1,4 +1,4 @@
-import { Injectable, inject } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
@@ -8,8 +8,10 @@ import { Alert, ApiResponse, PaginatedResponse } from '../models/weather.model';
   providedIn: 'root'
 })
 export class AlertService {
-  private http = inject(HttpClient);
-  private apiUrl = environment.apiUrl;
+  private baseUrl = environment.apiUrl;
+  private apiEndpoints = environment.apiEndpoints;
+
+  constructor(private http: HttpClient) {}
 
   getActiveAlerts(city?: string, limit: number = 50): Observable<ApiResponse<Alert[]>> {
     let params = new HttpParams().set('limit', limit.toString());
@@ -18,7 +20,7 @@ export class AlertService {
     }
     
     return this.http.get<ApiResponse<Alert[]>>(
-      `${this.apiUrl}${environment.apiEndpoints.alerts.active}`,
+      `${this.baseUrl}${this.apiEndpoints.alerts.active}`,
       { params }
     );
   }
@@ -39,7 +41,7 @@ export class AlertService {
     if (alertType) params = params.set('alertType', alertType);
 
     return this.http.get<PaginatedResponse<Alert>>(
-      `${this.apiUrl}${environment.apiEndpoints.alerts.history}`,
+      `${this.baseUrl}${this.apiEndpoints.alerts.history}`,
       { params }
     );
   }
@@ -51,14 +53,14 @@ export class AlertService {
     }
     
     return this.http.get(
-      `${this.apiUrl}${environment.apiEndpoints.alerts.config}`,
+      `${this.baseUrl}${this.apiEndpoints.alerts.config}`,
       { params }
     );
   }
 
   updateAlertConfig(config: any): Observable<any> {
     return this.http.put(
-      `${this.apiUrl}${environment.apiEndpoints.alerts.config}`,
+      `${this.baseUrl}${this.apiEndpoints.alerts.update}`,
       config
     );
   }
