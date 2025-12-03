@@ -1,4 +1,4 @@
-import express, { Request, Response, NextFunction, Application } from 'express';
+import express, { Request, Response, Application } from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import compression from 'compression';
@@ -8,11 +8,10 @@ import { config, validateConfig } from './config/env';
 import { connectDB, initializeIndexes } from './config/database';
 import logger from './config/logger';
 import cronScheduler from './jobs/cronScheduler';
+import { errorHandler, notFoundHandler } from './middleware/errorHandler';
 
 // Import routes
-import weatherRoutes from './routes/weatherRoutes';
-import dashboardRoutes from './routes/dashboardRoutes';
-import alertRoutes from './routes/alertRoutes';
+import apiRoutes from './routes/index';
 
 // Validate environment variables
 validateConfig();
@@ -47,26 +46,13 @@ app.get('/health', (_req: Request, res: Response) => {
 });
 
 // API Routes
-app.use('/api/weather', weatherRoutes);
-app.use('/api/dashboard', dashboardRoutes);
-app.use('/api/alerts', alertRoutes);
+app.use('/api', apiRoutes);
 
 // 404 handler
-app.use((_req: Request, res: Response) => {
-  res.status(404).json({ error: 'Route not found' });
-});
+app.use(notFoundHandler);
 
 // Error handling middleware
-app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
-  logger.error(`Error: ${err.message}`, { stack: err.stack });
-  
-  res.status(err.status || 500).json({
-    error: {
-      message: err.message || 'Internal server error',
-      ...(config.nodeEnv === 'development' && { stack: err.stack })
-    }
-  });
-});
+app.use(errorHandler);
 
 /**
  * Start the server

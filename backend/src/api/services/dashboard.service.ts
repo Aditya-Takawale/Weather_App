@@ -276,6 +276,65 @@ class DashboardService {
       frequency[a] > frequency[b] ? a : b
     );
   }
+
+  /**
+   * Get dashboard summary (cached or fresh)
+   */
+  async getDashboardSummary(city: string, forceRefresh: boolean) {
+    let summary;
+    
+    if (forceRefresh) {
+      logger.info(`Force refresh requested for ${city} dashboard`);
+      summary = await this.computeSummary(city);
+      if (summary) {
+        await this.saveSummary(summary);
+      }
+    } else {
+      summary = await DashboardSummary.getLatest(city);
+      
+      if (!summary) {
+        logger.warn(`No cached summary for ${city}, computing fresh data`);
+        summary = await this.computeSummary(city);
+        if (summary) {
+          await this.saveSummary(summary);
+        }
+      }
+    }
+    
+    return summary;
+  }
+
+  /**
+   * Get hourly trends
+   */
+  async getHourlyTrends(city: string, hours: number) {
+    return await this.computeHourlyTrends(city);
+  }
+
+  /**
+   * Get report details with pagination
+   */
+  async getReportDetails(params: any) {
+    // Placeholder for report generation logic
+    // This would typically query the database with filters
+    return {
+      status: 200,
+      totalRecords: 0,
+      data: []
+    };
+  }
+
+  /**
+   * Export dashboard data
+   */
+  async exportData(params: any) {
+    // Placeholder for export logic
+    return {
+      exported: true,
+      format: 'json',
+      data: []
+    };
+  }
 }
 
 export default new DashboardService();

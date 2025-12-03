@@ -458,6 +458,82 @@ class WeatherService {
       };
     }
   }
+
+  /**
+   * Get current weather from database
+   */
+  async getCurrentWeather(city: string) {
+    return await RawWeatherData.getLatest(city);
+  }
+
+  /**
+   * Get weather history with pagination
+   */
+  async getWeatherHistory(city: string, page: number, limit: number, startDate: Date | null, endDate: Date | null) {
+    const query: any = { city, isDeleted: false };
+    
+    if (startDate && endDate) {
+      query.timestamp = { $gte: startDate, $lte: endDate };
+    } else if (startDate) {
+      query.timestamp = { $gte: startDate };
+    } else if (endDate) {
+      query.timestamp = { $lte: endDate };
+    }
+    
+    const skip = (page - 1) * limit;
+    
+    const data = await RawWeatherData.find(query)
+      .sort({ timestamp: -1 })
+      .skip(skip)
+      .limit(limit)
+      .lean();
+    
+    const totalRecords = await RawWeatherData.countDocuments(query);
+    const totalPages = Math.ceil(totalRecords / limit);
+    
+    return {
+      success: true,
+      data,
+      pagination: {
+        page,
+        limit,
+        totalRecords,
+        totalPages,
+        hasNextPage: page < totalPages,
+        hasPreviousPage: page > 1
+      },
+      filters: { city, startDate, endDate },
+      timestamp: new Date().toISOString()
+    };
+  }
+
+  /**
+   * Get 5-day forecast
+   */
+  async getForecast(city?: string) {
+    return await this.fetchForecast();
+  }
+
+  /**
+   * Get air quality data
+   */
+  async getAirQuality(city?: string) {
+    return await this.fetchAirQuality();
+  }
+
+  /**
+   * Get UV index
+   */
+  async getUVIndex() {
+    return await this.fetchUVIndex();
+  }
+
+  /**
+   * Get moon data
+   */
+  async getMoonData() {
+    return await this.fetchMoonData();
+  }
 }
 
 export default new WeatherService();
