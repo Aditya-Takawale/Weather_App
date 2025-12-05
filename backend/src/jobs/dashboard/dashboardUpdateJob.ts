@@ -1,6 +1,6 @@
-import dashboardService from '../services/dashboard.service';
-import logger from '../config/logger';
-import { config } from '../config/env';
+import dashboardService from '../../services/dashboard/dashboard.service';
+import logger from '../../database/config/logger';
+import { config } from '../../database/config/env';
 
 /**
  * Cron Job 2: Dashboard Data Population

@@ -1,6 +1,6 @@
-import RawWeatherData from '../models/RawWeatherData';
-import logger from '../config/logger';
-import { config } from '../config/env';
+import RawWeatherData from '../models/weather/RawWeatherData';
+import logger from '../database/config/logger';
+import { config } from '../database/config/env';
 
 /**
  * Cron Job 3: Data Cleanup

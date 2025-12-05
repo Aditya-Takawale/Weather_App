@@ -1,5 +1,5 @@
-import weatherService from '../services/weather.service';
-import logger from '../config/logger';
+import weatherService from '../../services/weather/weather.service';
+import logger from '../../database/config/logger';
 
 /**
  * Cron Job 1: Data Fetching

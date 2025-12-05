@@ -1,8 +1,8 @@
-import RawWeatherData from '../models/RawWeatherData';
-import AlertLog from '../models/AlertLog';
-import AlertConfig from '../models/AlertConfig';
-import logger from '../config/logger';
-import { config } from '../config/env';
+import RawWeatherData from '../../models/weather/RawWeatherData';
+import AlertLog from '../../models/alerts/AlertLog';
+import AlertConfig from '../../models/alerts/AlertConfig';
+import logger from '../../database/config/logger';
+import { config } from '../../database/config/env';
 
 /**
  * Cron Job 4: Weather Alert Notification

@@ -1,6 +1,6 @@
 import cron from 'node-cron';
-import { config } from '../config/env';
-import logger from '../config/logger';
+import { config } from '../database/config/env';
+import logger from '../database/config/logger';
 
 /**
  * Cron Job Scheduler
@@ -18,7 +18,7 @@ const startAll = () => {
     jobs.dataFetch = cron.schedule(config.cronSchedules.dataFetch, async () => {
       logger.info('🔄 [Cron Job 1] Starting data fetch...');
       try {
-        const { fetchWeatherData } = await import('./dataFetchJob');
+        const { fetchWeatherData } = await import('./weather/dataFetchJob');
         await fetchWeatherData();
         logger.info('✅ [Cron Job 1] Data fetch completed');
       } catch (error: any) {
@@ -33,7 +33,7 @@ const startAll = () => {
     jobs.dashboardUpdate = cron.schedule(config.cronSchedules.dashboardUpdate, async () => {
       logger.info('📊 [Cron Job 2] Starting dashboard data update...');
       try {
-        const { updateDashboardSummary } = await import('./dashboardUpdateJob');
+        const { updateDashboardSummary } = await import('./dashboard/dashboardUpdateJob');
         await updateDashboardSummary();
         logger.info('✅ [Cron Job 2] Dashboard data updated');
       } catch (error: any) {
@@ -63,7 +63,7 @@ const startAll = () => {
     jobs.alertCheck = cron.schedule(config.cronSchedules.alertCheck, async () => {
       logger.info('🚨 [Cron Job 4] Starting alert check...');
       try {
-        const { checkWeatherAlerts } = await import('./alertCheckJob');
+        const { checkWeatherAlerts } = await import('./alerts/alertCheckJob');
         await checkWeatherAlerts();
         logger.info('✅ [Cron Job 4] Alert check completed');
       } catch (error: any) {

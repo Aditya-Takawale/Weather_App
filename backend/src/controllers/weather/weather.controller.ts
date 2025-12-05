@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
-import weatherService from '../services/weather.service';
-import logger from '../config/logger';
+import weatherService from '../../services/weather/weather.service';
+import logger from '../../database/config/logger';
 
 /**
  * Weather Controller

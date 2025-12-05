@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
-import dashboardService from '../services/dashboard.service';
-import logger from '../config/logger';
+import dashboardService from '../../services/dashboard/dashboard.service';
+import logger from '../../database/config/logger';
 
 /**
  * Dashboard Controller

@@ -1,7 +1,7 @@
 import axios from 'axios';
-import { config } from '../config/env';
-import logger from '../config/logger';
-import RawWeatherData from '../models/RawWeatherData';
+import { config } from '../../database/config/env';
+import logger from '../../database/config/logger';
+import RawWeatherData from '../../models/weather/RawWeatherData';
 
 /**
  * Weather API Service

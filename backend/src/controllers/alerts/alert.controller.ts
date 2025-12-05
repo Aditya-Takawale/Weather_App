@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
-import AlertLog from '../models/AlertLog';
-import AlertConfig, { IAlertConfig } from '../models/AlertConfig';
-import logger from '../config/logger';
+import AlertLog from '../../models/alerts/AlertLog';
+import AlertConfig, { IAlertConfig } from '../../models/alerts/AlertConfig';
+import logger from '../../database/config/logger';
 
 /**
  * Alert Controller

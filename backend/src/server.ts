@@ -4,9 +4,9 @@ import helmet from 'helmet';
 import compression from 'compression';
 import morgan from 'morgan';
 
-import { config, validateConfig } from './config/env';
-import { connectDB, initializeIndexes } from './config/database';
-import logger from './config/logger';
+import { config, validateConfig } from './database/config/env';
+import { connectDB, initializeIndexes } from './database/config/database';
+import logger from './database/config/logger';
 import cronScheduler from './jobs/cronScheduler';
 import { errorHandler, notFoundHandler } from './middleware/errorHandler';
 

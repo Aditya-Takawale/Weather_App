@@ -1,6 +1,6 @@
-import RawWeatherData, { IRawWeatherData } from '../models/RawWeatherData';
-import DashboardSummary from '../models/DashboardSummary';
-import logger from '../config/logger';
+import RawWeatherData, { IRawWeatherData } from '../../models/weather/RawWeatherData';
+import DashboardSummary from '../../models/dashboard/DashboardSummary';
+import logger from '../../database/config/logger';
 
 /**
  * Dashboard Service
