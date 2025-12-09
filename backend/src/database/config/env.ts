@@ -68,7 +68,7 @@ const config: Config = {
   dataRetentionDays: parseInt(process.env.DATA_RETENTION_DAYS || '2', 10),
   
   // CORS
-  corsOrigin: process.env.CORS_ORIGIN || 'http://localhost:4200',
+  corsOrigin: process.env.CORS_ORIGIN || 'http://localhost:4000',
   
   // Logging
   logLevel: process.env.LOG_LEVEL || 'info'
